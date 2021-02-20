@@ -68,12 +68,12 @@ namespace proyectoCine
                 comando = conexion.CreateCommand();
                 comando.CommandText = "DELETE FROM peliculas";
                 comando.ExecuteNonQuery();
-                    comando.Parameters.Add("@id", SqliteType.Integer);
-                    comando.Parameters.Add("@titulo", SqliteType.Text);
-                    comando.Parameters.Add("@cartel", SqliteType.Text);
-                    comando.Parameters.Add("@año", SqliteType.Integer);
-                    comando.Parameters.Add("@genero", SqliteType.Text);
-                    comando.Parameters.Add("@calificacion", SqliteType.Text);
+                comando.Parameters.Add("@id", SqliteType.Integer);
+                comando.Parameters.Add("@titulo", SqliteType.Text);
+                comando.Parameters.Add("@cartel", SqliteType.Text);
+                comando.Parameters.Add("@año", SqliteType.Integer);
+                comando.Parameters.Add("@genero", SqliteType.Text);
+                comando.Parameters.Add("@calificacion", SqliteType.Text);
                 foreach (Pelicula pelicula in peliculas)
                 {
                     comando.CommandText = "INSERT INTO peliculas VALUES(@id,@titulo, @cartel,@año,@genero,@calificacion)";
