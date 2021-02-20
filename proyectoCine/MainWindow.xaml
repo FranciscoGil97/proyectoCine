@@ -8,9 +8,107 @@
     mc:Ignorable="d"
     Title="Cine"
     Height="450"
-    Width="800"
-    >
-    <Grid>
+    Width="800">
+    <!--Icon=""-->
 
-    </Grid>
+    <Window.Resources>
+        <Style
+            x:Key="tabs"
+            TargetType="TabItem">
+            <Setter
+                Property="Width"
+                Value="100" />
+        </Style>
+        <DataTemplate
+            x:Key="cartelera">
+            <Border
+                BorderBrush="Red"
+                BorderThickness="2">
+                <DockPanel
+                    LastChildFill="True" Margin="5">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        DockPanel.Dock="Bottom">
+                        <TextBlock
+                            Text="Calificación: " />
+                        <TextBlock
+                            Text="{Binding Path=Calificacion}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        DockPanel.Dock="Bottom">
+                        <TextBlock
+                            Text="{Binding Path=Genero}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        DockPanel.Dock="Bottom">
+                        <TextBlock
+                            Text="{Binding Path=Año}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        DockPanel.Dock="Bottom">
+                        <TextBlock
+                            Text="{Binding Path=Titulo}" />
+                    </StackPanel>
+                    <Image
+                        Source="{Binding Path=Cartel}"
+                        Width="150" 
+                        Height="270"/>
+                </DockPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel
+        LastChildFill="True">
+        <Menu
+            DockPanel.Dock="Top">
+            <MenuItem
+                Header="Ayuda" />
+        </Menu>
+        <TabControl
+            DockPanel.Dock="Top">
+            <TabItem
+                Header="Cartelera">
+                <ListBox
+                    x:Name="peliculas"
+                    ItemsSource="{Binding Path=Peliculas}"
+                    ItemTemplate="{StaticResource cartelera}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </TabItem>
+            <TabItem
+                Style="{StaticResource tabs}"
+                Header="Salas">
+                <DataGrid
+                    x:Name="salasDataGrid"
+                    ItemsSource="{Binding}"
+                    ColumnWidth="*"></DataGrid>
+            </TabItem>
+            <TabItem
+                Style="{StaticResource tabs}"
+                Header="Sesiones">
+
+            </TabItem>
+            <TabItem
+                Style="{StaticResource tabs}"
+                Header="Ventas">
+
+            </TabItem>
+            <TabItem
+                Style="{StaticResource tabs}"
+                Header="Ocupación salas">
+
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

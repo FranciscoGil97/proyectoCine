@@ -15,14 +15,16 @@ using System.Windows.Shapes;
 
 namespace proyectoCine
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowVM mainWindowVM;
+
         public MainWindow()
         {
+            mainWindowVM = new MainWindowVM();
             InitializeComponent();
+
+            DataContext = mainWindowVM;
         }
     }
 }
