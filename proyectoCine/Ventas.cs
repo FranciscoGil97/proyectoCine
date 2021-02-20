@@ -10,6 +10,9 @@ namespace proyectoCine
     class Ventas : INotifyPropertyChanged
     {
         private int id;
+        private Sesion sesion;
+        private int cantidad;
+        private string pago;
 
         public int Id
         {
@@ -20,19 +23,42 @@ namespace proyectoCine
                 NotifyPropertyChanged("Id");
             }
         }
-
-        private Sesion sesion;
-
         public Sesion Sesion
         {
             get { return sesion; }
-            set { sesion = value;
+            set
+            {
+                sesion = value;
                 NotifyPropertyChanged("Sesion");
             }
         }
+        public int Cantidad
+        {
+            get { return cantidad; }
+            set
+            {
+                cantidad = value;
+                NotifyPropertyChanged("Cantidad");
+            }
+        }
+        public string Pago
+        {
+            get { return pago; }
+            set { pago = value;
+                NotifyPropertyChanged("Pago");
+            }
+        }
 
-
-
+        public Ventas(int id,
+                      Sesion sesion,
+                      int cantidad,
+                      string pago)
+        {
+            Id = id;
+            Sesion = sesion;
+            Cantidad = cantidad;
+            Pago = pago;
+        }
 
         public void NotifyPropertyChanged(string propertyName)
         {
