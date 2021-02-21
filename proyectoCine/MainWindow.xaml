@@ -10,7 +10,16 @@
     Height="450"
     Width="800">
     <!--Icon=""-->
-
+    <Window.CommandBindings>
+        <CommandBinding
+            Command="local:SalasCommands.AddSala"
+            CanExecute="AddSala_CanExecute"
+            Executed="AddSala_Executed" />
+        <CommandBinding
+            Command="local:SalasCommands.ActualizarSala"
+            CanExecute="ActualizarSala_CanExecute"
+            Executed="ActualizarSala_Executed" />
+    </Window.CommandBindings>
     <Window.Resources>
         <Style
             x:Key="tabs"
@@ -99,16 +108,16 @@
                         LastChildFill="False">
                         <Button
                             x:Name="actualizarSesion"
-                            Content="Actualizar sesión"
+                            Content="Actualizar sala"
                             DockPanel.Dock="Left"
                             Margin="5,0"
-                            Click="ActualizarSesion_Click" />
+                            Command="local:SalasCommands.ActualizarSala"/>
                         <Button
                             x:Name="añadirSesion"
-                            Content="Añadir sesión"
+                            Content="Añadir sala"
                             DockPanel.Dock="Right"
                             Margin="5,0"
-                            Click="AñadirSesion_Click" />
+                            Command="local:SalasCommands.AddSala"/>
                     </DockPanel>
                     <DataGrid
                         x:Name="salasDataGrid"

@@ -371,7 +371,7 @@ namespace proyectoCine
                 if (datos.HasRows)
                 {
                     int idSesion, idPelicula, idSala;
-                    string hora, tituloPelicula,nombreSala;
+                    string hora, tituloPelicula, nombreSala;
 
                     while (datos.Read())
                     {
@@ -379,10 +379,10 @@ namespace proyectoCine
                         idPelicula = datos.GetInt32(datos.GetOrdinal("idPelicula"));
                         idSala = datos.GetInt32(datos.GetOrdinal("idSala"));
                         hora = (string)datos["hora"];
-                        tituloPelicula= (string)datos["titulo"];
-                        nombreSala= (string)datos["nombreSala"];
+                        tituloPelicula = (string)datos["titulo"];
+                        nombreSala = (string)datos["nombreSala"];
 
-                        sesiones.Add(new Sesion(idSesion, idPelicula, idSala, hora,nombreSala,tituloPelicula));
+                        sesiones.Add(new Sesion(idSesion, idPelicula, idSala, hora, nombreSala, tituloPelicula));
                     }
                 }
             }
@@ -431,6 +431,44 @@ namespace proyectoCine
             catch (Exception ex)
             {
                 MessageBox.Show("Actualizar salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void InsertaSala(Salas sala)
+        {
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+                comando.Parameters.Add("@id", SqliteType.Integer);
+                comando.Parameters.Add("@disponible", SqliteType.Integer);
+                comando.Parameters.Add("@capacidad", SqliteType.Integer);
+                comando.Parameters.Add("@numero", SqliteType.Text);
+                comando.CommandText = "INSERT INTO salas VALUES(@id, @numero, @capacidad, @disponible)";
+
+
+                comando.Parameters["@id"].Value = sala.Id;
+                comando.Parameters["@numero"].Value = sala.Numero;
+                comando.Parameters["@capacidad"].Value = sala.Capacidad;
+                comando.Parameters["@disponible"].Value = (sala.Disponible ? 1 : 0);
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Insertar sala en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {

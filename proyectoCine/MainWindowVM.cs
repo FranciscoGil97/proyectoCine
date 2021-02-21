@@ -36,5 +36,12 @@ namespace proyectoCine
             Sesiones = Servicios.Sesiones;
         }
 
+        public void Actualiza()
+        {
+            Peliculas = Servicios.Peliculas;
+            Salas = Servicios.Salas;
+            Sesiones = Servicios.Sesiones;
+        }
+
     }
 }

@@ -25,21 +25,40 @@ namespace proyectoCine
             InitializeComponent();
 
             DataContext = mainWindowVM;
-        }
-
-        private void SalasDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-
-        }
-
-        private void AñadirSesion_Click(object sender, RoutedEventArgs e)
-        {
 
         }
 
         private void ActualizarSesion_Click(object sender, RoutedEventArgs e)
         {
             actualizarSesion.IsEnabled = salasDataGrid.SelectedItem != null;
+        }
+
+        private void AddSala_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void AddSala_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddSala addSala = new AddSala();
+
+            if ((bool)addSala.ShowDialog())
+            {
+                Servicios.InsertaSala(new Salas(0, addSala.Disponible, addSala.Capacidad, addSala.Numero));
+            }
+            mainWindowVM.Actualiza();
+            DataContext = null;
+            DataContext = mainWindowVM;
+        }
+
+        private void ActualizarSala_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = salasDataGrid != null && salasDataGrid.SelectedItem != null;
+        }
+
+        private void ActualizarSala_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
         }
     }
 }

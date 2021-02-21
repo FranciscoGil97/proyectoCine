@@ -14,11 +14,14 @@ namespace proyectoCine
 {
     static class Servicios
     {
-        public static ObservableCollection<Pelicula> Peliculas => ObtenPeliculas();
-        public static ObservableCollection<Sesion> Sesiones => ObtenSesiones();
-
-        public static ObservableCollection<Salas> Salas => ObtenSalas();
         static DAOCine _DAOCine = new DAOCine();
+        private static ObservableCollection<Sesion> sesiones;
+        private static ObservableCollection<Pelicula> peliculas;
+        private static ObservableCollection<Salas> salas;
+        
+        public static ObservableCollection<Pelicula> Peliculas { get => ObtenPeliculas(); set => peliculas = value; }
+        public static ObservableCollection<Sesion> Sesiones { get => ObtenSesiones(); set => sesiones = value; }
+        public static ObservableCollection<Salas> Salas { get => ObtenSalas(); set => salas = value; }
 
         static ObservableCollection<Pelicula> ObtenPeliculas()
         {
@@ -88,6 +91,13 @@ namespace proyectoCine
             sesiones.Add(new Sesion(3, Peliculas[1].Id, Salas[3].Id, "19:45"));
 
             _DAOCine.InsertaSesiones(sesiones);
+        }
+
+        public static void InsertaSala(Salas sala)
+        {
+            sala.Id = Salas[Salas.Count - 1].Id + 1;
+            _DAOCine.InsertaSala(sala);
+
         }
 
         private static ObservableCollection<Salas> ObtenSalas()

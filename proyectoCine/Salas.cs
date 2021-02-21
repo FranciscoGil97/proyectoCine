@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace proyectoCine
 {
-    class Salas : INotifyPropertyChanged
+    public class Salas : INotifyPropertyChanged
     {
         private int id;
         private bool disponible;
