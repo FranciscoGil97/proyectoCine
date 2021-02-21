@@ -9,20 +9,24 @@ namespace proyectoCine
 {
     class MainWindowVM
     {
-        public ObservableCollection<Pelicula> Peliculas { get;}
-        DAOCine _DAOCine = new DAOCine();
+        public ObservableCollection<Pelicula> Peliculas { get; private set; }
+        public ObservableCollection<Salas> Salas { get; set; }
+        public ObservableCollection<Sesion> Sesiones { get; set; }
+        private Salas salaSeleccionada;
+
+        public Salas SalaSeleccionada
+        {
+            get { return salaSeleccionada; }
+            set { salaSeleccionada = value; }
+        }
+
+
         public MainWindowVM()
         {
-            string fechaActual = DateTime.Now.ToString().Split(' ')[0];
-            if (Properties.Settings.Default.FechaUltimaActualizacion != fechaActual)
-            {
-                Properties.Settings.Default.FechaUltimaActualizacion = fechaActual;
-                Properties.Settings.Default.Save();
-                Servicios.RenuevaPeliculas();
-            }
-
             Peliculas = Servicios.Peliculas;
-            _DAOCine.InsertaPelicula(Peliculas);
+            Salas = Servicios.Salas;
+            Sesiones = Servicios.Sesiones;
         }
+
     }
 }

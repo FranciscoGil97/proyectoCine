@@ -15,47 +15,82 @@ namespace proyectoCine
     static class Servicios
     {
         public static ObservableCollection<Pelicula> Peliculas => ObtenPeliculas();
+        public static ObservableCollection<Sesion> Sesiones { get; set; }
+
+        public static ObservableCollection<Salas> Salas => ObtenSalas();
+        static DAOCine _DAOCine = new DAOCine();
 
         static ObservableCollection<Pelicula> ObtenPeliculas()
         {
-            ObservableCollection<Pelicula> peliculasJson = new ObservableCollection<Pelicula>();
+            // Mejor obtener los datos desde la BD y desde un fichero
+            ObservableCollection<Pelicula> peliculas = null;
             try
             {
-                using (StreamReader jsonStream = File.OpenText("..\\..\\peliculas.json"))
+                string fechaActual = DateTime.Now.ToString().Split(' ')[0]; // formato fecha (dd/mm/aaaa HH:MM:SS)
+                if (Properties.Settings.Default.FechaUltimaActualizacion != fechaActual)
                 {
-                    var json = jsonStream.ReadToEnd();
-                    peliculasJson = JsonConvert.DeserializeObject<ObservableCollection<Pelicula>>(json);
+                    Properties.Settings.Default.FechaUltimaActualizacion = fechaActual;
+                    Properties.Settings.Default.Save();
+                    RenuevaPeliculas();
                 }
 
+                peliculas = _DAOCine.ObtenPeliculas();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"ERROR",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show("Obten películas: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                peliculas = new ObservableCollection<Pelicula>();
             }
-            return peliculasJson;
+            return peliculas;
         }
 
         public static void RenuevaPeliculas()
         {
             try
             {
-                string urlArchivo = "peliculas.json";
-
                 var cliente = new RestClient(Properties.Settings.Default.urlApi);
                 var request = new RestRequest(Method.GET);
                 var response = cliente.Execute(request);
 
                 JsonConvert.SerializeObject(response.Content);
 
-
-                string personasJson = JsonConvert.SerializeObject(response.Content);
-                File.WriteAllText(urlArchivo, personasJson);
+                ObservableCollection<Pelicula> peliculas = JsonConvert.DeserializeObject<ObservableCollection<Pelicula>>(response.Content);
+                InsertaPeliculas(peliculas);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Renueva peliculas: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
 
+        public static void InsertaPeliculas(ObservableCollection<Pelicula> peliculas)
+        {
+            _DAOCine.InsertaPelicula(Peliculas);
+        }
+
+        public static void InsertaSalas()
+        {
+            ObservableCollection<Salas> salas = new ObservableCollection<Salas>();
+            salas.Add(new Salas(1, true, 90, "A1"));
+            salas.Add(new Salas(2, true, 60, "B2"));
+            salas.Add(new Salas(3, true, 100, "A3"));
+            salas.Add(new Salas(4, false, 80, "A4"));
+            salas.Add(new Salas(5, true, 95, "C5"));
+
+            _DAOCine.InsertaSalas(salas);
+        }
+
+        public static void InsertaSesiones()
+        {
+            ObservableCollection<Sesion> sesiones = new ObservableCollection<Sesion>();
+        }
+
+        private static ObservableCollection<Salas> ObtenSalas()
+        {
+            if (!_DAOCine.ExistenSalas())// si todavia no se han creado las salas se crean
+                InsertaSalas();
+
+            return _DAOCine.ObtenSalas();
         }
     }
 }
