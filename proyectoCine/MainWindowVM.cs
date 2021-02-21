@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace proyectoCine
 {
@@ -12,12 +13,19 @@ namespace proyectoCine
         public ObservableCollection<Pelicula> Peliculas { get; private set; }
         public ObservableCollection<Salas> Salas { get; set; }
         public ObservableCollection<Sesion> Sesiones { get; set; }
-        private Salas salaSeleccionada;
+        public Salas salaSeleccionada;
+        public Sesion sesionSeleccionada;
 
         public Salas SalaSeleccionada
         {
             get { return salaSeleccionada; }
-            set { salaSeleccionada = value; }
+            set
+            {
+                if (salaSeleccionada!=null && salaSeleccionada != value)
+                    Servicios.ActualizaSala(salaSeleccionada);
+                salaSeleccionada = value;
+
+            }
         }
 
 

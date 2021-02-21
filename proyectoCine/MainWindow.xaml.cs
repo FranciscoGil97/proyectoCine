@@ -26,5 +26,20 @@ namespace proyectoCine
 
             DataContext = mainWindowVM;
         }
+
+        private void SalasDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+
+        }
+
+        private void AñadirSesion_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ActualizarSesion_Click(object sender, RoutedEventArgs e)
+        {
+            actualizarSesion.IsEnabled = salasDataGrid.SelectedItem != null;
+        }
     }
 }

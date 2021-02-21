@@ -192,6 +192,48 @@ namespace proyectoCine
             }
         }
 
+        public void InsertaSesiones(ObservableCollection<Sesion> sesiones)
+        {
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+                comando.CommandText = "DELETE FROM sesiones";
+                comando.ExecuteNonQuery();
+                comando.Parameters.Add("@idSesion", SqliteType.Integer);
+                comando.Parameters.Add("@pelicula", SqliteType.Integer);
+                comando.Parameters.Add("@sala", SqliteType.Integer);
+                comando.Parameters.Add("@hora", SqliteType.Text);
+                comando.CommandText = "INSERT INTO sesiones VALUES(@idSesion, @pelicula, @sala, @hora)";
+                foreach (Sesion sesion in sesiones)
+                {
+                    comando.Parameters["@idSesion"].Value = sesion.Id;
+                    comando.Parameters["@pelicula"].Value = sesion.IdPelicula;
+                    comando.Parameters["@sala"].Value = sesion.IdSala;
+                    comando.Parameters["@hora"].Value = sesion.Hora;
+                    comando.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Insertar sesiones en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+        }
+
         public bool ExistenSalas()
         {
             bool existenSalas = false;
@@ -221,6 +263,37 @@ namespace proyectoCine
                 }
             }
             return existenSalas;
+        }
+
+        public bool ExistenSesiones()
+        {
+            bool existenSesiones = false;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT COUNT(*) FROM sesiones";
+                existenSesiones = Convert.ToInt32(comando.ExecuteScalar()) != 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Existen salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return existenSesiones;
         }
 
         public ObservableCollection<Salas> ObtenSalas()
@@ -274,6 +347,67 @@ namespace proyectoCine
             return salas;
         }
 
+        public ObservableCollection<Sesion> ObtenSesiones()
+        {
+            ObservableCollection<Sesion> sesiones = new ObservableCollection<Sesion>();
+            SqliteDataReader datos = null;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT idSesion, " +
+                                                "peliculas.idPelicula AS 'idPelicula', " +
+                                                "peliculas.titulo AS 'titulo', " +
+                                                "salas.idSala AS 'idSala'," +
+                                                "salas.numero AS 'nombreSala'," +
+                                                "hora " +
+                                        "FROM peliculas JOIN sesiones JOIN salas " +
+                                            "ON  sesiones.pelicula = peliculas.idPelicula " +
+                                                "AND sesiones.sala = salas.idSala";
+                datos = comando.ExecuteReader();
+
+                if (datos.HasRows)
+                {
+                    int idSesion, idPelicula, idSala;
+                    string hora, tituloPelicula,nombreSala;
+
+                    while (datos.Read())
+                    {
+                        idSesion = datos.GetInt32(datos.GetOrdinal("idSesion"));
+                        idPelicula = datos.GetInt32(datos.GetOrdinal("idPelicula"));
+                        idSala = datos.GetInt32(datos.GetOrdinal("idSala"));
+                        hora = (string)datos["hora"];
+                        tituloPelicula= (string)datos["titulo"];
+                        nombreSala= (string)datos["nombreSala"];
+
+                        sesiones.Add(new Sesion(idSesion, idPelicula, idSala, hora,nombreSala,tituloPelicula));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Leer salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                    if (datos != null && datos.IsClosed)
+                        datos.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            return sesiones;
+        }
+
         public void ActualizaSala(Salas sala)
         {
             try
@@ -282,7 +416,7 @@ namespace proyectoCine
                 Conexion.Open();
                 comando = Conexion.CreateCommand();
 
-                comando.CommandText = "UPDATE salas SET numero=@numero, capacidad=@capacida, disponible=@disponibls WHERE idSala=@idSala";
+                comando.CommandText = "UPDATE salas SET numero=@numero, capacidad=@capacidad, disponible=@disponible WHERE idSala=@idSala";
                 comando.Parameters.Add("@idSala", SqliteType.Integer);
                 comando.Parameters.Add("@numero", SqliteType.Text);
                 comando.Parameters.Add("@capacidad", SqliteType.Integer);
@@ -300,7 +434,6 @@ namespace proyectoCine
             }
             finally
             {
-
                 try
                 {
                     if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro

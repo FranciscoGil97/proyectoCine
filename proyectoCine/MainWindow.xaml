@@ -25,7 +25,8 @@
                 BorderBrush="Red"
                 BorderThickness="2">
                 <DockPanel
-                    LastChildFill="True" Margin="5">
+                    LastChildFill="True"
+                    Margin="5">
                     <StackPanel
                         Orientation="Horizontal"
                         DockPanel.Dock="Bottom">
@@ -57,8 +58,8 @@
                     </StackPanel>
                     <Image
                         Source="{Binding Path=Cartel}"
-                        Width="150" 
-                        Height="270"/>
+                        Width="150"
+                        Height="270" />
                 </DockPanel>
             </Border>
         </DataTemplate>
@@ -74,7 +75,9 @@
             DockPanel.Dock="Top">
             <TabItem
                 Header="Cartelera">
+
                 <ListBox
+                    DockPanel.Dock="Top"
                     x:Name="peliculas"
                     ItemsSource="{Binding Path=Peliculas}"
                     ItemTemplate="{StaticResource cartelera}"
@@ -89,16 +92,71 @@
             <TabItem
                 Style="{StaticResource tabs}"
                 Header="Salas">
-                <DataGrid
-                    x:Name="salasDataGrid"
-                    ItemsSource="{Binding Path=Salas}"
-                    ColumnWidth="*"
-                    SelectedItem="{Binding Path=SalaSeleccionada}"></DataGrid>
+                <DockPanel
+                    LastChildFill="True">
+                    <DockPanel
+                        DockPanel.Dock="Bottom"
+                        LastChildFill="False">
+                        <Button
+                            x:Name="actualizarSesion"
+                            Content="Actualizar sesión"
+                            DockPanel.Dock="Left"
+                            Margin="5,0"
+                            Click="ActualizarSesion_Click" />
+                        <Button
+                            x:Name="añadirSesion"
+                            Content="Añadir sesión"
+                            DockPanel.Dock="Right"
+                            Margin="5,0"
+                            Click="AñadirSesion_Click" />
+                    </DockPanel>
+                    <DataGrid
+                        x:Name="salasDataGrid"
+                        ItemsSource="{Binding Path=Salas}"
+                        SelectedItem="{Binding Path=SalaSeleccionada}"
+                        AutoGenerateColumns="False"
+                        ColumnWidth="*">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Header="Id"
+                                Binding="{Binding Path=Id}" />
+                            <DataGridTextColumn
+                                Header="Número"
+                                Binding="{Binding Path=Numero}" />
+                            <DataGridTextColumn
+                                Header="Capacidad"
+                                Binding="{Binding Path=Capacidad}" />
+                            <DataGridCheckBoxColumn
+                                Header="Disponible"
+                                Binding="{Binding Path=Disponible}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"
                 Header="Sesiones">
-
+                <DataGrid
+                    x:Name="sesionesDataGrid"
+                    ItemsSource="{Binding Path=Sesiones}"
+                    SelectedItem="{Binding Path=sesionSeleccionada}"
+                    ColumnWidth="*"
+                    AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Header="Id sesión"
+                            Binding="{Binding Path=Id}" />
+                        <DataGridTextColumn
+                            Header="Película"
+                            Binding="{Binding Path=TituloPelicula}" />
+                        <DataGridTextColumn
+                            Header="Sala"
+                            Binding="{Binding Path=NombreSala}" />
+                        <DataGridTextColumn
+                            Header="Hora"
+                            Binding="{Binding Path=Hora}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"

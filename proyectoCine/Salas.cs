@@ -26,7 +26,9 @@ namespace proyectoCine
         public bool Disponible
         {
             get { return disponible; }
-            set { disponible = value;
+            set
+            {
+                disponible = value;
                 NotifyPropertyChanged("Disponible");
             }
         }
@@ -60,7 +62,7 @@ namespace proyectoCine
             Numero = numero;
         }
 
-        public Salas(){}
+        public Salas() { }
 
         public void NotifyPropertyChanged(string propertyName)
         {
