@@ -128,16 +128,20 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Header="Id"
-                                Binding="{Binding Path=Id}" />
+                                Binding="{Binding Path=Id}"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Número"
-                                Binding="{Binding Path=Numero}" />
+                                Binding="{Binding Path=Numero}" 
+                                IsReadOnly="True"/>
                             <DataGridTextColumn
                                 Header="Capacidad"
-                                Binding="{Binding Path=Capacidad}" />
+                                Binding="{Binding Path=Capacidad}"
+                                IsReadOnly="True" />
                             <DataGridCheckBoxColumn
                                 Header="Disponible"
-                                Binding="{Binding Path=Disponible}" />
+                                Binding="{Binding Path=Disponible}"
+                                IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>

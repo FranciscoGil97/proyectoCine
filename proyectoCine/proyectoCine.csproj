@@ -92,15 +92,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddSala.xaml.cs">
-      <DependentUpon>AddSala.xaml</DependentUpon>
+    <Compile Include="AddUpdateSala.xaml.cs">
+      <DependentUpon>AddUpdateSala.xaml</DependentUpon>
     </Compile>
     <Compile Include="Salas.cs" />
     <Compile Include="Servicios.cs" />
     <Compile Include="Sesion.cs" />
     <Compile Include="SalasCommands.cs" />
     <Compile Include="Ventas.cs" />
-    <Page Include="AddSala.xaml">
+    <Page Include="AddUpdateSala.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

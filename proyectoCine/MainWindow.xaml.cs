@@ -40,13 +40,16 @@ namespace proyectoCine
 
         private void AddSala_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            AddSala addSala = new AddSala();
+            AddUpdateSala addSala = new AddUpdateSala("Añadir Sala");
+
+            addSala.ResizeMode = ResizeMode.NoResize;
+            addSala.ShowInTaskbar = false;
 
             if ((bool)addSala.ShowDialog())
             {
                 Servicios.InsertaSala(new Salas(0, addSala.Disponible, addSala.Capacidad, addSala.Numero));
             }
-            mainWindowVM.Actualiza();
+            mainWindowVM.ActualizaVista();
             DataContext = null;
             DataContext = mainWindowVM;
         }
@@ -58,6 +61,27 @@ namespace proyectoCine
 
         private void ActualizarSala_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            AddUpdateSala actualizarSala = new AddUpdateSala("Actualizar Sala")
+            {
+                Numero = mainWindowVM.salaSeleccionada.Numero,
+                Capacidad = mainWindowVM.salaSeleccionada.Capacidad,
+                Disponible = mainWindowVM.salaSeleccionada.Disponible
+            };
+            actualizarSala.ResizeMode = ResizeMode.NoResize;
+            actualizarSala.ShowInTaskbar = false;
+
+            if ((bool)actualizarSala.ShowDialog())
+            {
+                mainWindowVM.SalaSeleccionada.Capacidad = actualizarSala.Capacidad;
+                mainWindowVM.SalaSeleccionada.Numero = actualizarSala.Numero;
+                mainWindowVM.SalaSeleccionada.Disponible = actualizarSala.Disponible;
+
+                Servicios.ActualizaSala(mainWindowVM.SalaSeleccionada);
+            }
+            mainWindowVM.ActualizaVista();
+            DataContext = null;
+            DataContext = mainWindowVM;
+
 
         }
     }

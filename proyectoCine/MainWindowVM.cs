@@ -36,12 +36,11 @@ namespace proyectoCine
             Sesiones = Servicios.Sesiones;
         }
 
-        public void Actualiza()
+        public void ActualizaVista()
         {
             Peliculas = Servicios.Peliculas;
             Salas = Servicios.Salas;
             Sesiones = Servicios.Sesiones;
         }
-
     }
 }
