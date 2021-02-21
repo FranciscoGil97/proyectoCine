@@ -450,21 +450,30 @@ namespace proyectoCine
         {
             try
             {
-                SqliteCommand comando;
-                Conexion.Open();
-                comando = Conexion.CreateCommand();
-                comando.Parameters.Add("@id", SqliteType.Integer);
-                comando.Parameters.Add("@disponible", SqliteType.Integer);
-                comando.Parameters.Add("@capacidad", SqliteType.Integer);
-                comando.Parameters.Add("@numero", SqliteType.Text);
-                comando.CommandText = "INSERT INTO salas VALUES(@id, @numero, @capacidad, @disponible)";
+                if (ExisteSala(sala))
+                {
+                    MessageBox.Show("Ya existe una sala con el mismo número.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
 
 
-                comando.Parameters["@id"].Value = sala.Id;
-                comando.Parameters["@numero"].Value = sala.Numero;
-                comando.Parameters["@capacidad"].Value = sala.Capacidad;
-                comando.Parameters["@disponible"].Value = (sala.Disponible ? 1 : 0);
-                comando.ExecuteNonQuery();
+                    SqliteCommand comando;
+                    Conexion.Open();
+                    comando = Conexion.CreateCommand();
+                    comando.Parameters.Add("@id", SqliteType.Integer);
+                    comando.Parameters.Add("@disponible", SqliteType.Integer);
+                    comando.Parameters.Add("@capacidad", SqliteType.Integer);
+                    comando.Parameters.Add("@numero", SqliteType.Text);
+                    comando.CommandText = "INSERT INTO salas VALUES(@id, @numero, @capacidad, @disponible)";
+
+
+                    comando.Parameters["@id"].Value = sala.Id;
+                    comando.Parameters["@numero"].Value = sala.Numero;
+                    comando.Parameters["@capacidad"].Value = sala.Capacidad;
+                    comando.Parameters["@disponible"].Value = (sala.Disponible ? 1 : 0);
+                    comando.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
@@ -484,5 +493,35 @@ namespace proyectoCine
             }
         }
 
+        public bool ExisteSala(Salas sala)
+        {
+            bool existeSala = false;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT COUNT(*) FROM salas WHERE numero='" + sala.Numero+"' ";
+                existeSala = Convert.ToInt32(comando.ExecuteScalar()) != 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Existen salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return existeSala;
+        }
     }
 }
