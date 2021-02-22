@@ -19,6 +19,20 @@
             Command="local:SalasCommands.ActualizarSala"
             CanExecute="ActualizarSala_CanExecute"
             Executed="ActualizarSala_Executed" />
+
+        <CommandBinding
+            Command="local:SesionCommands.AddSesion"
+            Executed="AddSesion_Executed"
+            CanExecute="AddSesion_CanExecute" />
+        <CommandBinding
+            Command="local:SesionCommands.ActualizarSesion"
+            Executed="ActualizarSesion_Executed"
+            CanExecute="ActualizarSesion_CanExecute" />
+        <CommandBinding
+            Command="local:SesionCommands.EliminarSesion"
+            Executed="EliminarSesion_Executed"
+            CanExecute="EliminarSesion_CanExecute"/>
+
     </Window.CommandBindings>
     <Window.Resources>
         <Style
@@ -111,13 +125,13 @@
                             Content="Actualizar sala"
                             DockPanel.Dock="Left"
                             Margin="5,0"
-                            Command="local:SalasCommands.ActualizarSala"/>
+                            Command="local:SalasCommands.ActualizarSala" />
                         <Button
                             x:Name="añadirSesion"
                             Content="Añadir sala"
                             DockPanel.Dock="Right"
                             Margin="5,0"
-                            Command="local:SalasCommands.AddSala"/>
+                            Command="local:SalasCommands.AddSala" />
                     </DockPanel>
                     <DataGrid
                         x:Name="salasDataGrid"
@@ -132,8 +146,8 @@
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Número"
-                                Binding="{Binding Path=Numero}" 
-                                IsReadOnly="True"/>
+                                Binding="{Binding Path=Numero}"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Capacidad"
                                 Binding="{Binding Path=Capacidad}"
@@ -149,27 +163,48 @@
             <TabItem
                 Style="{StaticResource tabs}"
                 Header="Sesiones">
-                <DataGrid
-                    x:Name="sesionesDataGrid"
-                    ItemsSource="{Binding Path=Sesiones}"
-                    SelectedItem="{Binding Path=sesionSeleccionada}"
-                    ColumnWidth="*"
-                    AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Header="Id sesión"
-                            Binding="{Binding Path=Id}" />
-                        <DataGridTextColumn
-                            Header="Película"
-                            Binding="{Binding Path=TituloPelicula}" />
-                        <DataGridTextColumn
-                            Header="Sala"
-                            Binding="{Binding Path=NombreSala}" />
-                        <DataGridTextColumn
-                            Header="Hora"
-                            Binding="{Binding Path=Hora}" />
-                    </DataGrid.Columns>
-                </DataGrid>
+                <DockPanel LastChildFill="True">
+                    <DockPanel
+                        DockPanel.Dock="Bottom"
+                        LastChildFill="False">
+                        <Button
+                            DockPanel.Dock="Right"
+                            Content="Añadir sesión" 
+                            Margin="5,0"
+                            Command="local:SesionCommands.AddSesion"/>
+                        <Button
+                            DockPanel.Dock="Left"
+                            Content="Eliminar sesión"
+                            Margin="5,0"
+                            Command="local:SesionCommands.EliminarSesion"/>
+                        <Button
+                            DockPanel.Dock="Right"
+                            Content="Actualizar sesión"
+                            Command="local:SesionCommands.ActualizarSesion"/>
+                    </DockPanel>
+                    <DataGrid
+                        DockPanel.Dock="Top"
+                        x:Name="sesionesDataGrid"
+                        ItemsSource="{Binding Path=Sesiones}"
+                        SelectedItem="{Binding Path=SesionSeleccionada}"
+                        ColumnWidth="*"
+                        AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Header="Id sesión"
+                                Binding="{Binding Path=Id}" />
+                            <DataGridTextColumn
+                                Header="Película"
+                                Binding="{Binding Path=TituloPelicula}" />
+                            <DataGridTextColumn
+                                Header="Sala"
+                                Binding="{Binding Path=NombreSala}" />
+                            <DataGridTextColumn
+                                Header="Hora"
+                                Binding="{Binding Path=Hora}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"

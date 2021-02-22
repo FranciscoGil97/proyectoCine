@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace proyectoCine
 {
-    class Pelicula : INotifyPropertyChanged
+    public class Pelicula : INotifyPropertyChanged
     {
         private int id;
         private string titulo;

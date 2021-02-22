@@ -208,12 +208,58 @@ namespace proyectoCine
                 comando.CommandText = "INSERT INTO sesiones VALUES(@idSesion, @pelicula, @sala, @hora)";
                 foreach (Sesion sesion in sesiones)
                 {
-                    comando.Parameters["@idSesion"].Value = sesion.Id;
-                    comando.Parameters["@pelicula"].Value = sesion.IdPelicula;
-                    comando.Parameters["@sala"].Value = sesion.IdSala;
-                    comando.Parameters["@hora"].Value = sesion.Hora;
-                    comando.ExecuteNonQuery();
+                    if (EsPosibleInsertarSesion(sesion))
+                    {
+                        
+                        comando.Parameters["@idSesion"].Value = sesion.Id;
+                        comando.Parameters["@pelicula"].Value = sesion.IdPelicula;
+                        comando.Parameters["@sala"].Value = sesion.IdSala;
+                        comando.Parameters["@hora"].Value = sesion.Hora;
+                        comando.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Insertar sesiones en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+        }
+
+        public void InsertaSesion(Sesion sesion)
+        {
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+                comando.Parameters.Add("@idSesion", SqliteType.Integer);
+                comando.Parameters.Add("@pelicula", SqliteType.Integer);
+                comando.Parameters.Add("@sala", SqliteType.Integer);
+                comando.Parameters.Add("@hora", SqliteType.Text);
+                comando.CommandText = "INSERT INTO sesiones VALUES(@idSesion, @pelicula, @sala, @hora)";
+
+                    if (EsPosibleInsertarSesion(sesion))
+                    {
+
+                        comando.Parameters["@idSesion"].Value = sesion.Id;
+                        comando.Parameters["@pelicula"].Value = sesion.IdPelicula;
+                        comando.Parameters["@sala"].Value = sesion.IdSala;
+                        comando.Parameters["@hora"].Value = sesion.Hora;
+                        comando.ExecuteNonQuery();
+                    }
             }
             catch (Exception ex)
             {
@@ -264,7 +310,7 @@ namespace proyectoCine
             }
             return existenSalas;
         }
-        
+
         public bool ExisteSala(Salas sala)
         {
             bool existeSala = false;
@@ -555,7 +601,40 @@ namespace proyectoCine
             }
         }
 
+        public bool EsPosibleInsertarSesion(Sesion sesion)
+        {
+            //No abro/cierro la conexión porque este método se llama antes de insertar una sesion y será ese método el que se encargue de abrir/cerrar la conexión
+            bool esPosibleInsertar = false;
+            try
+            {
+                SqliteCommand comando;
+                comando = Conexion.CreateCommand();
 
+                comando.CommandText = "SELECT COUNT(*) FROM sesiones WHERE sala=" + sesion.IdSala;
+                esPosibleInsertar = Convert.ToInt32(comando.ExecuteScalar()) < 3;
+
+                //compruebo si es posible insertar la sesión, porque si ya hay mas de tres
+                //sesiones asicionadas a una misma sala no me hace falta saber si la sala esta disponible
+                if (esPosibleInsertar)
+                {
+                    comando.CommandText = "SELECT disponible FROM salas WHERE idSala=" + sesion.IdSala;
+
+                    //Ejecuto como un escalar porque sólo me va a devolver 0 ó distinto de cero
+                    esPosibleInsertar = Convert.ToInt32(comando.ExecuteScalar()) != 0;
+
+                    if(!esPosibleInsertar)
+                        MessageBox.Show("La sala no está disponible.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                    MessageBox.Show("Esta sala ya tiene asociada 3 sesiones.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es posible insertar sesión en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return esPosibleInsertar;
+        }
 
     }
 }

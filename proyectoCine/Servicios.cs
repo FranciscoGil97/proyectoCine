@@ -41,7 +41,7 @@ namespace proyectoCine
                 {
                     RenuevaPeliculas();
                 }
-                
+
                 peliculasBD = _DAOCine.ObtenPeliculas();
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace proyectoCine
             ObservableCollection<Sesion> sesionesInsertar = new ObservableCollection<Sesion>();
             sesionesInsertar.Add(new Sesion(1, Peliculas[0].Id, Salas[0].Id, "20:00"));
             sesionesInsertar.Add(new Sesion(2, Peliculas[2].Id, Salas[2].Id, "18:30"));
-            sesionesInsertar.Add(new Sesion(3, Peliculas[1].Id, Salas[3].Id, "19:45"));
+            sesionesInsertar.Add(new Sesion(3, Peliculas[1].Id, Salas[2].Id, "19:45"));
 
             _DAOCine.InsertaSesiones(sesionesInsertar);
         }
@@ -118,6 +118,11 @@ namespace proyectoCine
         public static void ActualizaSala(Salas sala)
         {
             _DAOCine.ActualizaSala(sala);
+        }
+    
+        public static void InsertaSesion(Sesion sesion)
+        {
+            _DAOCine.InsertaSesion(sesion);
         }
     }
 }

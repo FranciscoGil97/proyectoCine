@@ -84,5 +84,57 @@ namespace proyectoCine
 
 
         }
+
+        private void AddSesion_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddUpdateSesion addUpdateSesion = new AddUpdateSesion("Añadir sesión");
+
+            addUpdateSesion.Peliculas = mainWindowVM.Peliculas;
+            addUpdateSesion.Salas = mainWindowVM.Salas;
+            if ((bool)addUpdateSesion.ShowDialog())
+            {
+                int nuevoIdSesion = mainWindowVM.Sesiones[mainWindowVM.Sesiones.Count - 1].Id + 1;
+                Sesion sesionNueva = new Sesion(nuevoIdSesion, addUpdateSesion.Pelicula.Id,addUpdateSesion.Sala.Id,addUpdateSesion.Hora);
+                Servicios.InsertaSesion(sesionNueva);
+            }
+            mainWindowVM.ActualizaVista();
+            DataContext = null;
+            DataContext = mainWindowVM;
+        }
+
+        private void AddSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ActualizarSesion_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddUpdateSesion addUpdateSesion = new AddUpdateSesion("Actualizar sesión");
+
+            addUpdateSesion.Peliculas = mainWindowVM.Peliculas;
+            addUpdateSesion.Salas = mainWindowVM.Salas;
+            addUpdateSesion.Sala = mainWindowVM.Salas[mainWindowVM.SesionSeleccionada.IdSala-1];
+            addUpdateSesion.Pelicula = mainWindowVM.Peliculas[mainWindowVM.SesionSeleccionada.IdPelicula-1];
+            addUpdateSesion.Hora = mainWindowVM.SesionSeleccionada.Hora;
+            if ((bool)addUpdateSesion.ShowDialog())
+            {
+
+            }
+        }
+
+        private void ActualizarSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = sesionesDataGrid != null && sesionesDataGrid.SelectedItem != null;
+        }
+
+        private void EliminarSesion_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void EliminarSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = sesionesDataGrid != null && sesionesDataGrid.SelectedItem != null;
+        }
     }
 }

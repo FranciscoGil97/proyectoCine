@@ -95,12 +95,20 @@
     <Compile Include="AddUpdateSala.xaml.cs">
       <DependentUpon>AddUpdateSala.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AddUpdateSesion.xaml.cs">
+      <DependentUpon>AddUpdateSesion.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Salas.cs" />
     <Compile Include="Servicios.cs" />
     <Compile Include="Sesion.cs" />
     <Compile Include="SalasCommands.cs" />
+    <Compile Include="SesionCommands.cs" />
     <Compile Include="Ventas.cs" />
     <Page Include="AddUpdateSala.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddUpdateSesion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

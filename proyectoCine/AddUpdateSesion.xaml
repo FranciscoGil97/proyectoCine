@@ -1,0 +1,94 @@
+﻿<Window
+    x:Class="proyectoCine.AddUpdateSesion"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:proyectoCine"
+    mc:Ignorable="d"
+    Height="300"
+    Width="400">
+    <Window.Resources>
+        <Style
+            TargetType="TextBlock">
+            <Setter
+                Property="Grid.Column"
+                Value="0" />
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Right" />
+            <Setter
+                Property="Margin"
+                Value="8,0" />
+
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="0.4*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Text="Película" />
+        <ComboBox
+            x:Name="peliculaComboBox"
+            Grid.Row="0"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            SelectedItem="{Binding Path=Pelicula}"/>
+
+        <TextBlock
+            Grid.Row="1"
+            Text="Sala"/>
+        <ComboBox
+            x:Name="salaComboBox"
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0" 
+            SelectedItem="{Binding Path=Sala}"
+            IsEditable="False"/>
+
+        <TextBlock
+            Grid.Row="2"
+            Text="Hora" />
+        <TextBox
+            x:Name="disponibleCheckBox"
+            Grid.Row="2"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            Text="{Binding Path=Hora, Mode=TwoWay}"/>
+        
+        <DockPanel
+            Grid.ColumnSpan="2"
+            Grid.Row="4"
+            LastChildFill="False">
+            <Button
+                Content="Cancelar"
+                IsCancel="True"
+                DockPanel.Dock="Left"
+                VerticalAlignment="Center"
+                Margin="8,0" />
+            <Button
+                Content="Aceptar"
+                IsDefault="True"
+                DockPanel.Dock="Right"
+                VerticalAlignment="Center"
+                Margin="8,0"
+                Click="Button_Click" />
+        </DockPanel>
+    </Grid>
+</Window>
