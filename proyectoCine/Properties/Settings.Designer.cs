@@ -23,12 +23,15 @@ namespace proyectoCine.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://dint2021.azurewebsites.net/api/peliculas")]
         public string urlApi {
             get {
                 return ((string)(this["urlApi"]));
+            }
+            set {
+                this["urlApi"] = value;
             }
         }
         

@@ -63,9 +63,9 @@ namespace proyectoCine
         {
             AddUpdateSala actualizarSala = new AddUpdateSala("Actualizar Sala")
             {
-                Numero = mainWindowVM.salaSeleccionada.Numero,
-                Capacidad = mainWindowVM.salaSeleccionada.Capacidad,
-                Disponible = mainWindowVM.salaSeleccionada.Disponible
+                Numero = mainWindowVM.SalaSeleccionada.Numero,
+                Capacidad = mainWindowVM.SalaSeleccionada.Capacidad,
+                Disponible = mainWindowVM.SalaSeleccionada.Disponible
             };
             actualizarSala.ResizeMode = ResizeMode.NoResize;
             actualizarSala.ShowInTaskbar = false;

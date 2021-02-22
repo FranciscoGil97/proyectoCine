@@ -13,27 +13,12 @@ namespace proyectoCine
         public ObservableCollection<Pelicula> Peliculas { get; private set; }
         public ObservableCollection<Salas> Salas { get; set; }
         public ObservableCollection<Sesion> Sesiones { get; set; }
-        public Salas salaSeleccionada;
-        public Sesion sesionSeleccionada;
-
-        public Salas SalaSeleccionada
-        {
-            get { return salaSeleccionada; }
-            set
-            {
-                if (salaSeleccionada!=null && salaSeleccionada != value)
-                    Servicios.ActualizaSala(salaSeleccionada);
-                salaSeleccionada = value;
-
-            }
-        }
-
+        public Salas SalaSeleccionada { get; set; }
+        public Sesion SesionSeleccionada { get; set; }
 
         public MainWindowVM()
         {
-            Peliculas = Servicios.Peliculas;
-            Salas = Servicios.Salas;
-            Sesiones = Servicios.Sesiones;
+            ActualizaVista();
         }
 
         public void ActualizaVista()

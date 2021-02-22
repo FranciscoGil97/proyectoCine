@@ -44,8 +44,8 @@ namespace proyectoCine
 
         private void CrearTablas()
         {
-            SqliteCommand comando;
             Conexion.Open();
+            SqliteCommand comando;
             comando = Conexion.CreateCommand();
 
             comando.CommandText = crearTablaPeliculas;
@@ -67,6 +67,8 @@ namespace proyectoCine
                 SqliteCommand comando;
                 Conexion.Open();
                 comando = Conexion.CreateCommand();
+                comando.CommandText = "DELETE FROM sesiones";
+                comando.ExecuteNonQuery();
                 comando.CommandText = "DELETE FROM peliculas";
                 comando.ExecuteNonQuery();
                 comando.Parameters.Add("@id", SqliteType.Integer);
@@ -75,11 +77,9 @@ namespace proyectoCine
                 comando.Parameters.Add("@año", SqliteType.Integer);
                 comando.Parameters.Add("@genero", SqliteType.Text);
                 comando.Parameters.Add("@calificacion", SqliteType.Text);
-                comando.CommandText = "INSERT INTO peliculas VALUES(@id,@titulo, @cartel,@año,@genero,@calificacion)";
+                comando.CommandText = "INSERT INTO peliculas VALUES (@id,@titulo, @cartel,@año,@genero,@calificacion) ";
                 foreach (Pelicula pelicula in peliculas)
                 {
-
-
                     comando.Parameters["@id"].Value = pelicula.Id;
                     comando.Parameters["@titulo"].Value = pelicula.Titulo;
                     comando.Parameters["@cartel"].Value = pelicula.Cartel;
@@ -264,6 +264,37 @@ namespace proyectoCine
             }
             return existenSalas;
         }
+        
+        public bool ExisteSala(Salas sala)
+        {
+            bool existeSala = false;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT COUNT(*) FROM salas WHERE numero='" + sala.Numero + "' ";
+                existeSala = Convert.ToInt32(comando.ExecuteScalar()) != 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Existen salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return existeSala;
+        }
 
         public bool ExistenSesiones()
         {
@@ -294,6 +325,37 @@ namespace proyectoCine
                 }
             }
             return existenSesiones;
+        }
+
+        public bool ExistenPeliculas()
+        {
+            bool existenSalas = false;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT COUNT(*) FROM peliculas";
+                existenSalas = Convert.ToInt32(comando.ExecuteScalar()) != 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Existen salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return existenSalas;
         }
 
         public ObservableCollection<Salas> ObtenSalas()
@@ -493,37 +555,7 @@ namespace proyectoCine
             }
         }
 
-        public bool ExisteSala(Salas sala)
-        {
-            bool existeSala = false;
-            try
-            {
-                SqliteCommand comando;
-                Conexion.Open();
-                comando = Conexion.CreateCommand();
 
-                comando.CommandText = "SELECT COUNT(*) FROM salas WHERE numero='" + sala.Numero+"' ";
-                existeSala = Convert.ToInt32(comando.ExecuteScalar()) != 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Existen salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                try
-                {
-                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
-                        Conexion.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            return existeSala;
-        }
-    
-    
+
     }
 }
