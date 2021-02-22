@@ -124,5 +124,10 @@ namespace proyectoCine
         {
             _DAOCine.InsertaSesion(sesion);
         }
+
+        public static void ActualizaSesion(Sesion sesion)
+        {
+            _DAOCine.ActualizaSesion(sesion);
+        }
     }
 }

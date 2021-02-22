@@ -134,11 +134,13 @@
                             Command="local:SalasCommands.AddSala" />
                     </DockPanel>
                     <DataGrid
+                        DockPanel.Dock="Top"
                         x:Name="salasDataGrid"
                         ItemsSource="{Binding Path=Salas}"
                         SelectedItem="{Binding Path=SalaSeleccionada}"
+                        ColumnWidth="*"
                         AutoGenerateColumns="False"
-                        ColumnWidth="*">
+                        CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Header="Id"
@@ -188,20 +190,25 @@
                         ItemsSource="{Binding Path=Sesiones}"
                         SelectedItem="{Binding Path=SesionSeleccionada}"
                         ColumnWidth="*"
-                        AutoGenerateColumns="False">
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Header="Id sesión"
-                                Binding="{Binding Path=Id}" />
+                                Binding="{Binding Path=Id}"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Película"
-                                Binding="{Binding Path=TituloPelicula}" />
+                                Binding="{Binding Path=TituloPelicula}"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Sala"
-                                Binding="{Binding Path=NombreSala}" />
+                                Binding="{Binding Path=NombreSala}"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Hora"
-                                Binding="{Binding Path=Hora}" />
+                                Binding="{Binding Path=Hora}"
+                                IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
