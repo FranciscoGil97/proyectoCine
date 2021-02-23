@@ -31,7 +31,7 @@
         <CommandBinding
             Command="local:SesionCommands.EliminarSesion"
             Executed="EliminarSesion_Executed"
-            CanExecute="EliminarSesion_CanExecute"/>
+            CanExecute="EliminarSesion_CanExecute" />
 
     </Window.CommandBindings>
     <Window.Resources>
@@ -165,24 +165,25 @@
             <TabItem
                 Style="{StaticResource tabs}"
                 Header="S_esiones">
-                <DockPanel LastChildFill="True">
+                <DockPanel
+                    LastChildFill="True">
                     <DockPanel
                         DockPanel.Dock="Bottom"
                         LastChildFill="False">
                         <Button
                             DockPanel.Dock="Right"
-                            Content="Añadir sesión" 
+                            Content="Añadir sesión"
                             Margin="5,0"
-                            Command="local:SesionCommands.AddSesion"/>
+                            Command="local:SesionCommands.AddSesion" />
                         <Button
                             DockPanel.Dock="Left"
                             Content="Eliminar sesión"
                             Margin="5,0"
-                            Command="local:SesionCommands.EliminarSesion"/>
+                            Command="local:SesionCommands.EliminarSesion" />
                         <Button
                             DockPanel.Dock="Right"
                             Content="Actualizar sesión"
-                            Command="local:SesionCommands.ActualizarSesion"/>
+                            Command="local:SesionCommands.ActualizarSesion" />
                     </DockPanel>
                     <DataGrid
                         DockPanel.Dock="Top"
@@ -223,8 +224,9 @@
                         DockPanel.Dock="Bottom">
                         <Button
                             DockPanel.Dock="Right"
-                            Content="Vender entradas" 
-                            Margin="5,0"/>
+                            Content="Vender entradas"
+                            Margin="5,0"
+                            Click="RealizarVenta_Click" />
                     </DockPanel>
                     <DataGrid
                         DockPanel.Dock="Top"
@@ -237,8 +239,8 @@
                             <DataGridTextColumn
                                 Header="Id venta"
                                 Binding="{Binding Path=Id}"
-                                IsReadOnly="True" 
-                                Width="0.5*"/>
+                                IsReadOnly="True"
+                                Width="0.5*" />
                             <DataGridTextColumn
                                 Header="Id sesion"
                                 Binding="{Binding Path=Sesion.Id}"
@@ -247,8 +249,8 @@
                             <DataGridTextColumn
                                 Header="Título pelicula"
                                 Binding="{Binding Path=Sesion.Pelicula.Titulo}"
-                                IsReadOnly="True" 
-                                Width="1.5*"/>
+                                IsReadOnly="True"
+                                Width="1.5*" />
                             <DataGridTextColumn
                                 Header="Sala"
                                 Binding="{Binding Path=Sesion.Sala.Numero}"
@@ -272,7 +274,40 @@
             <TabItem
                 Style="{StaticResource tabs}"
                 Header="_Ocupación salas">
-
+                <DataGrid
+                    DockPanel.Dock="Top"
+                    ItemsSource="{Binding Path=OcupacionSalas}"
+                    ColumnWidth="*"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Header="Sala"
+                            Binding="{Binding Path=Sesion.Sala.Numero}"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Header="Id sesion"
+                            Binding="{Binding Path=Sesion.Id}"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Header="Película"
+                            Binding="{Binding Path=Sesion.Pelicula.Titulo}"
+                            IsReadOnly="True" 
+                            Width="1.5*"/>
+                        <DataGridTextColumn
+                            Header="Capacidad"
+                            Binding="{Binding Path=Sesion.Sala.Capacidad}"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Header="Disponibles"
+                            Binding="{Binding Path=Disponibles}"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Header="Vendidas"
+                            Binding="{Binding Path=Vendidas}"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </DockPanel>

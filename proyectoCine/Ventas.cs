@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace proyectoCine
 {
-    class Ventas : INotifyPropertyChanged
+    public class Ventas : INotifyPropertyChanged
     {
         private int id;
         private Sesion sesion;
         private int cantidad;
         private string pago;
-
+        
         public int Id
         {
             get { return id; }
@@ -44,7 +44,9 @@ namespace proyectoCine
         public string Pago
         {
             get { return pago; }
-            set { pago = value;
+            set
+            {
+                pago = value;
                 NotifyPropertyChanged("Pago");
             }
         }

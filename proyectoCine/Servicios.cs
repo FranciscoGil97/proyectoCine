@@ -15,19 +15,16 @@ namespace proyectoCine
     static class Servicios
     {
         static DAOCine _DAOCine = new DAOCine();
-        private static ObservableCollection<Sesion> sesiones;
-        private static ObservableCollection<Pelicula> peliculas;
-        private static ObservableCollection<Salas> salas;
-        private static ObservableCollection<Ventas> ventas;
 
-        public static ObservableCollection<Pelicula> Peliculas { get { return ObtenPeliculas(); } set => peliculas = value; }
-        public static ObservableCollection<Sesion> Sesiones { get => ObtenSesiones(); set => sesiones = value; }
-        public static ObservableCollection<Salas> Salas { get { return ObtenSalas(); } set => salas = value; }
+        public static ObservableCollection<Pelicula> Peliculas { get => ObtenPeliculas(); }
+        public static ObservableCollection<Sesion> Sesiones { get => ObtenSesiones(); }
+        public static ObservableCollection<Salas> Salas { get => ObtenSalas(); }
+        public static ObservableCollection<Ventas> Ventas { get => ObtenerVentas(); }
+        public static ObservableCollection<OcupacionSalas> OcupacionSalas { get => ObtenOcupacionSalas(); }
 
-        public static ObservableCollection<Ventas> Ventas
+        private static ObservableCollection<OcupacionSalas> ObtenOcupacionSalas()
         {
-            get { return ObtenerVentas(); }
-            set { ventas = value; }
+            return _DAOCine.ObtenOcupacion();
         }
 
         static ObservableCollection<Pelicula> ObtenPeliculas()
@@ -147,5 +144,9 @@ namespace proyectoCine
             _DAOCine.EliminaSesion(sesion);
         }
 
+        public static void InsertaVenta(Ventas venta)
+        {
+            _DAOCine.InsertaVenta(venta);
+        }
     }
 }

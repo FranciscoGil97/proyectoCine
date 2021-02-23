@@ -1,12 +1,12 @@
 ﻿<Window
-    x:Class="proyectoCine.AddUpdateSesion"
+    x:Class="proyectoCine.VenderEntradas"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:proyectoCine"
     mc:Ignorable="d"
-    Height="300"
+    Height="500"
     Width="400"
     Title="{Binding Path=Titulo}">
     <Window.Resources>
@@ -38,46 +38,94 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
-            Text="Película" />
+            Text="Sesión" />
         <ComboBox
-            x:Name="peliculaComboBox"
+            x:Name="sesionComboBox"
             Grid.Row="0"
             Grid.Column="1"
             VerticalAlignment="Center"
             Margin="5,0"
-            SelectedItem="{Binding Path=Pelicula}"
-            ItemsSource="{Binding Path=Peliculas}"
-            DisplayMemberPath="Titulo"/>
+            ItemsSource="{Binding Path=Sesiones}"
+            SelectedItem="{Binding Path=SesionSeleccionada}"
+            DisplayMemberPath="Id"/>
 
         <TextBlock
             Grid.Row="1"
-            Text="Sala"/>
-        <ComboBox
-            x:Name="salaComboBox"
+            Text="Número entradas" />
+        <TextBox
+            x:Name="numeroEntradasTextBox"
             Grid.Row="1"
             Grid.Column="1"
             VerticalAlignment="Center"
-            Margin="5,0" 
-            SelectedItem="{Binding Path=Sala, Mode=TwoWay}"
-            ItemsSource="{Binding Path=Salas}"
-            DisplayMemberPath="Numero"/>
-
+            Margin="5,0"/>
+        
         <TextBlock
             Grid.Row="2"
-            Text="Hora" />
-        <TextBox
+            Text="Forma de pago" />
+        <ComboBox
+            x:Name="formaPagoComboBox"
             Grid.Row="2"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            ItemsSource="{Binding Path=FormaPago}"
+            SelectedItem="{Binding Path=Venta.Pago}"/>
+
+        <TextBlock
+            Grid.Row="3"
+            Text="Entrada libres" />
+        <TextBox
+            Grid.Row="3"
             Grid.Column="1"
             VerticalAlignment="Center"
             Margin="5,0"
-            Text="{Binding Path=Hora, Mode=TwoWay}"/>
+            IsReadOnly="True"
+            Text="{Binding Path=EntradasLibres}"/>
         
+        <TextBlock
+            Grid.Row="4"
+            Text="Sala" />
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            IsReadOnly="True"
+            Text="{Binding Path=Venta.Sesion.Sala.Numero}"/>
+        
+        <TextBlock
+            Grid.Row="5"
+            Text="Pelicula" />
+        <TextBox
+            Grid.Row="5"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            IsReadOnly="True"
+            Text="{Binding Path=Venta.Sesion.Pelicula.Titulo}" />
+
+        <TextBlock
+            Grid.Row="6"
+            Text="Hora" />
+        <TextBox
+            Grid.Row="6"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Margin="5,0"
+            IsReadOnly="True"
+            Text="{Binding Path=Venta.Sesion.Hora}"/>
+
         <DockPanel
             Grid.ColumnSpan="2"
-            Grid.Row="4"
+            Grid.Row="7"
             LastChildFill="False">
             <Button
                 Content="Cancelar"
@@ -91,7 +139,7 @@
                 DockPanel.Dock="Right"
                 VerticalAlignment="Center"
                 Margin="8,0"
-                Click="Button_Click" />
+                Click="Button_Click"/>
         </DockPanel>
     </Grid>
 </Window>

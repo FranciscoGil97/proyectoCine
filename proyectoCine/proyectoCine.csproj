@@ -98,11 +98,15 @@
     <Compile Include="AddUpdateSesion.xaml.cs">
       <DependentUpon>AddUpdateSesion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OcupacionSalas.cs" />
     <Compile Include="Salas.cs" />
     <Compile Include="Servicios.cs" />
     <Compile Include="Sesion.cs" />
     <Compile Include="SalasCommands.cs" />
     <Compile Include="SesionCommands.cs" />
+    <Compile Include="VenderEntradas.xaml.cs">
+      <DependentUpon>VenderEntradas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ventas.cs" />
     <Page Include="AddUpdateSala.xaml">
       <SubType>Designer</SubType>
@@ -125,6 +129,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="VenderEntradas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowVM.cs" />

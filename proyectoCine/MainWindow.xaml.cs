@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,6 +88,8 @@ namespace proyectoCine
                 Peliculas = MainWindowVM.Peliculas,
                 Salas = MainWindowVM.Salas
             };
+            addSesion.ResizeMode = ResizeMode.NoResize;
+            addSesion.ShowInTaskbar = false;
 
             addSesion.Peliculas = MainWindowVM.Peliculas;
             addSesion.Salas = MainWindowVM.Salas;
@@ -116,7 +119,8 @@ namespace proyectoCine
 
             };
 
-
+            updateSesion.ResizeMode = ResizeMode.NoResize;
+            updateSesion.ShowInTaskbar = false;
 
             if ((bool)updateSesion.ShowDialog())
             {
@@ -142,6 +146,23 @@ namespace proyectoCine
         private void EliminarSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = sesionesDataGrid != null && sesionesDataGrid.SelectedItem != null;
+        }
+
+        private void RealizarVenta_Click(object sender, RoutedEventArgs e)
+        {
+            VenderEntradas venderEntradas = new VenderEntradas();
+            venderEntradas.Ventas = new ObservableCollection<Ventas>();
+            venderEntradas.Sesiones = MainWindowVM.Sesiones;
+            foreach (Ventas v in MainWindowVM.Ventas)
+                venderEntradas.Ventas.Add(new Ventas(v.Id, v.Sesion, v.Cantidad, v.Pago));
+
+            venderEntradas.ResizeMode = ResizeMode.NoResize;
+            venderEntradas.ShowInTaskbar = false;
+            if ((bool)venderEntradas.ShowDialog())
+            {
+                Servicios.InsertaVenta(venderEntradas.Venta);
+            }
+            ActualizaVista();
         }
     }
 }

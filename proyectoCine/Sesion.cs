@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace proyectoCine
 {
-    class Sesion : INotifyPropertyChanged
+    public class Sesion : INotifyPropertyChanged
     {
         private int id;
         private string hora;

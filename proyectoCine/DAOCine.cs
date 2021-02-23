@@ -215,8 +215,8 @@ namespace proyectoCine
                         idSesion = datos.GetInt32(datos.GetOrdinal("idSesion"));
                         hora = (string)datos["hora"];
 
-                        
-                        sesiones.Add(new Sesion(idSesion,p,s,hora));
+
+                        sesiones.Add(new Sesion(idSesion, p, s, hora));
                     }
                 }
             }
@@ -266,7 +266,7 @@ namespace proyectoCine
                                         "hora " +
                                     "FROM    peliculas JOIN sesiones JOIN salas " +
                                         "ON  sesiones.pelicula = peliculas.idPelicula " +
-                                            "AND sesiones.sala = salas.idSala "+
+                                            "AND sesiones.sala = salas.idSala " +
                                     "WHERE sesiones.IdSesion=" + idSesion;
                 datos = comando.ExecuteReader();
 
@@ -358,6 +358,60 @@ namespace proyectoCine
             return ventas;
         }
 
+        public ObservableCollection<OcupacionSalas> ObtenOcupacion()
+        {
+            ObservableCollection<OcupacionSalas> ocupacionSalas = new ObservableCollection<OcupacionSalas>();
+            SqliteDataReader datos = null;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT sesiones.idSesion AS 'idSesion', SUM(ventas.cantidad) AS 'vendidas', salas.capacidad - SUM(ventas.cantidad) AS 'disponibles' " +
+                                        "FROM salas JOIN sesiones JOIN ventas " +
+                                            "ON salas.idSala=sesiones.sala AND sesiones.idSesion =ventas.sesion " +
+                                        "GROUP BY sesiones.idSesion ;";
+                datos = comando.ExecuteReader();
+
+                if (datos.HasRows)
+                {
+                    int idSesion, vendidas, disponibles;
+
+                    while (datos.Read())
+                    {
+
+                        idSesion= datos.GetInt32(datos.GetOrdinal("idSesion"));
+                        vendidas= datos.GetInt32(datos.GetOrdinal("vendidas"));
+                        disponibles= datos.GetInt32(datos.GetOrdinal("disponibles"));
+
+                        Sesion sesion = ObtenSesion(idSesion);
+                        ocupacionSalas.Add(new OcupacionSalas(vendidas, disponibles, sesion));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Leer salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (datos != null && !datos.IsClosed)
+                        datos.Close();
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            return ocupacionSalas;
+        }
+
         public void InsertaPelicula(ObservableCollection<Pelicula> peliculas)
         {
             try
@@ -407,7 +461,7 @@ namespace proyectoCine
                     Conexion.Close();
             }
         }
-        
+
         public void InsertaSalas(ObservableCollection<Salas> salas)
         {
             try
@@ -583,7 +637,47 @@ namespace proyectoCine
             }
 
         }
-        
+
+        public void InsertaVenta(Ventas venta)
+        {
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+                comando.Parameters.Add("@idVenta", SqliteType.Integer);
+                comando.Parameters.Add("@sesion", SqliteType.Integer);
+                comando.Parameters.Add("@cantidad", SqliteType.Integer);
+                comando.Parameters.Add("@pago", SqliteType.Text);
+                comando.CommandText = "INSERT INTO ventas VALUES(@idVenta, @sesion, @cantidad, @pago)";
+
+
+
+                comando.Parameters["@idVenta"].Value = venta.Id;
+                comando.Parameters["@sesion"].Value = venta.Sesion.Id;
+                comando.Parameters["@cantidad"].Value = venta.Cantidad;
+                comando.Parameters["@pago"].Value = venta.Pago;
+                comando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Insertar venta en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         public bool ExistenSalas()
         {
             bool existenSalas = false;
@@ -854,6 +948,5 @@ namespace proyectoCine
                 }
             }
         }
-
     }
 }

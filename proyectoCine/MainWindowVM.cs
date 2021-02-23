@@ -16,7 +16,7 @@ namespace proyectoCine
         public ObservableCollection<Ventas> Ventas { get; set; }
         public Salas SalaSeleccionada { get; set; }
         public Sesion SesionSeleccionada { get; set; }
-
+        public static ObservableCollection<OcupacionSalas> OcupacionSalas { get; set; }
         public MainWindowVM()
         {
             ActualizaVista();
@@ -28,6 +28,7 @@ namespace proyectoCine
             Salas = Servicios.Salas;
             Sesiones = Servicios.Sesiones;
             Ventas = Servicios.Ventas;
+            OcupacionSalas = Servicios.OcupacionSalas;
         }
     }
 }
