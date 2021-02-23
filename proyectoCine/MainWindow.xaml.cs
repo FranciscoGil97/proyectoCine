@@ -93,7 +93,7 @@ namespace proyectoCine
             if ((bool)addSesion.ShowDialog())
             {
                 int nuevoIdSesion = MainWindowVM.Sesiones[MainWindowVM.Sesiones.Count - 1].Id + 1;
-                Sesion sesionNueva = new Sesion(nuevoIdSesion, addSesion.Pelicula.Id, addSesion.Sala.Id, addSesion.Hora);
+                Sesion sesionNueva = new Sesion(nuevoIdSesion, addSesion.Pelicula, addSesion.Sala, addSesion.Hora);
                 Servicios.InsertaSesion(sesionNueva);
             }
             ActualizaVista();
@@ -110,20 +110,22 @@ namespace proyectoCine
             {
                 Peliculas = MainWindowVM.Peliculas,
                 Salas = MainWindowVM.Salas,
-                Sala = MainWindowVM.Salas[MainWindowVM.SesionSeleccionada.IdSala - 1],
-                Pelicula = MainWindowVM.Peliculas[MainWindowVM.SesionSeleccionada.IdPelicula - 1],
+                Sala = MainWindowVM.Salas[MainWindowVM.SesionSeleccionada.Sala.Id-1],
+                Pelicula = MainWindowVM.Peliculas[MainWindowVM.SesionSeleccionada.Pelicula.Id-1],
                 Hora = MainWindowVM.SesionSeleccionada.Hora
 
             };
 
+
+
             if ((bool)updateSesion.ShowDialog())
             {
-                MainWindowVM.SesionSeleccionada.IdPelicula = updateSesion.Pelicula.Id;
-                MainWindowVM.SesionSeleccionada.IdSala = updateSesion.Sala.Id;
+                MainWindowVM.SesionSeleccionada.Pelicula = updateSesion.Pelicula;
+                MainWindowVM.SesionSeleccionada.Sala = updateSesion.Sala;
                 MainWindowVM.SesionSeleccionada.Hora = updateSesion.Hora;
                 Servicios.ActualizaSesion(MainWindowVM.SesionSeleccionada);
+                ActualizaVista();
             }
-            ActualizaVista();
         }
 
         private void ActualizarSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)

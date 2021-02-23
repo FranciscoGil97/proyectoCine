@@ -10,35 +10,29 @@ namespace proyectoCine
     class Sesion : INotifyPropertyChanged
     {
         private int id;
-        private int idPelicula;
-        private int idSala;
         private string hora;
-        private string tituloPelicula;
+        private Pelicula pelicula;
+        private Salas sala;
 
-        private string nombreSala;
-
-        public string NombreSala
+        public Pelicula Pelicula
         {
-            get { return nombreSala; }
+            get { return pelicula; }
             set
             {
-                nombreSala = value;
-                NotifyPropertyChanged("NombreSala");
+                pelicula = value;
+                NotifyPropertyChanged("Pelicula");
             }
         }
 
-
-        public string TituloPelicula
+        public Salas Sala
         {
-            get { return tituloPelicula; }
+            get { return sala; }
             set
             {
-                tituloPelicula = value;
-                NotifyPropertyChanged("TituloPelicula");
+                sala = value;
+                NotifyPropertyChanged("Sala");
             }
         }
-
-
 
         public int Id
         {
@@ -49,29 +43,6 @@ namespace proyectoCine
                 NotifyPropertyChanged("Id");
             }
         }
-
-
-        public int IdPelicula
-        {
-            get { return idPelicula; }
-            set
-            {
-                idPelicula = value;
-                NotifyPropertyChanged("IdPelicula");
-            }
-        }
-
-
-        public int IdSala
-        {
-            get { return idSala; }
-            set
-            {
-                idSala = value;
-                NotifyPropertyChanged("IdSala");
-            }
-        }
-
 
         public string Hora
         {
@@ -84,29 +55,14 @@ namespace proyectoCine
         }
 
         public Sesion(int id,
-                      int idPelicula,
-                      int idSala,
+                      Pelicula pelicula,
+                      Salas sala,
                       string hora)
         {
             Id = id;
-            IdPelicula = idPelicula;
-            IdSala = idSala;
+            Pelicula = pelicula;
+            Sala = sala;
             Hora = hora;
-        }
-
-        public Sesion(int id,
-                      int idPelicula,
-                      int idSala,
-                      string hora,
-                      string nombreSala,
-                      string tituloPelicula)
-        {
-            Id = id;
-            IdPelicula = idPelicula;
-            IdSala = idSala;
-            Hora = hora;
-            NombreSala = nombreSala;
-            TituloPelicula = tituloPelicula;
         }
 
         public void NotifyPropertyChanged(string propertyName)

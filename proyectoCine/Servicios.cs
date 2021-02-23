@@ -18,11 +18,11 @@ namespace proyectoCine
         private static ObservableCollection<Sesion> sesiones;
         private static ObservableCollection<Pelicula> peliculas;
         private static ObservableCollection<Salas> salas;
-        
+        private static ObservableCollection<Ventas> ventas;
+
         public static ObservableCollection<Pelicula> Peliculas { get { return ObtenPeliculas(); } set => peliculas = value; }
         public static ObservableCollection<Sesion> Sesiones { get => ObtenSesiones(); set => sesiones = value; }
         public static ObservableCollection<Salas> Salas { get { return ObtenSalas(); } set => salas = value; }
-        private static ObservableCollection<Ventas> ventas;
 
         public static ObservableCollection<Ventas> Ventas
         {
@@ -79,7 +79,7 @@ namespace proyectoCine
         {
             return _DAOCine.ObtenVentas();
         }
-        
+
         public static void RenuevaPeliculas()
         {
             try
@@ -114,9 +114,9 @@ namespace proyectoCine
         public static void InsertaSesiones()
         {
             ObservableCollection<Sesion> sesionesInsertar = new ObservableCollection<Sesion>();
-            sesionesInsertar.Add(new Sesion(1, Peliculas[0].Id, Salas[0].Id, "20:00"));
-            sesionesInsertar.Add(new Sesion(2, Peliculas[2].Id, Salas[2].Id, "18:30"));
-            sesionesInsertar.Add(new Sesion(3, Peliculas[1].Id, Salas[2].Id, "19:45"));
+            sesionesInsertar.Add(new Sesion(1, Peliculas[0], Salas[1], "20:00"));
+            sesionesInsertar.Add(new Sesion(2, Peliculas[3], Salas[2], "17:00"));
+            sesionesInsertar.Add(new Sesion(3, Peliculas[1], Salas[0], "19:00"));
 
             _DAOCine.InsertaSesiones(sesionesInsertar);
         }
@@ -131,7 +131,7 @@ namespace proyectoCine
         {
             _DAOCine.InsertaSesion(sesion);
         }
-    
+
         public static void ActualizaSala(Salas sala)
         {
             _DAOCine.ActualizaSala(sala);
@@ -141,7 +141,7 @@ namespace proyectoCine
         {
             _DAOCine.ActualizaSesion(sesion);
         }
-        
+
         public static void EliminarSesion(Sesion sesion)
         {
             _DAOCine.EliminaSesion(sesion);

@@ -199,11 +199,11 @@
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Película"
-                                Binding="{Binding Path=TituloPelicula}"
+                                Binding="{Binding Path=Pelicula.Titulo}"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Sala"
-                                Binding="{Binding Path=NombreSala}"
+                                Binding="{Binding Path=Sala.Numero}"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Hora"
@@ -246,12 +246,12 @@
                                 Width="0.5*" />
                             <DataGridTextColumn
                                 Header="Título pelicula"
-                                Binding="{Binding Path=Sesion.TituloPelicula}"
+                                Binding="{Binding Path=Sesion.Pelicula.Titulo}"
                                 IsReadOnly="True" 
                                 Width="1.5*"/>
                             <DataGridTextColumn
                                 Header="Sala"
-                                Binding="{Binding Path=Sesion.NombreSala}"
+                                Binding="{Binding Path=Sesion.Sala.Numero}"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Header="Hora"

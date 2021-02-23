@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,53 +20,63 @@ namespace proyectoCine
     /// <summary>
     /// Lógica de interacción para AddUpdateSesion.xaml
     /// </summary>
-    public partial class AddUpdateSesion : Window
+    public partial class AddUpdateSesion : Window, INotifyPropertyChanged
     {
         private ObservableCollection<Pelicula> peliculas;
         private ObservableCollection<Salas> salas;
+        private Salas sala;
+        private Pelicula pelicula;
 
         public string Hora { get; set; }
-        public Pelicula Pelicula { get; set; }
-        public Salas Sala { get; set; }
+        public Pelicula Pelicula
+        {
+            get => pelicula; set
+            {
+                pelicula = value;
+                NotifyPropertyChanged("Pelicula");
+            }
+        }
+        public Salas Sala
+        {
+            get => sala; set
+            {
+                sala = value;
+                NotifyPropertyChanged("Sala");
+            }
+        }
+
 
         public ObservableCollection<Pelicula> Peliculas
         {
-            get { return peliculas; }
-            set
+            get => peliculas; set
             {
                 peliculas = value;
-                peliculaComboBox.ItemsSource = peliculas;
+                NotifyPropertyChanged("Peliculas");
             }
         }
-
         public ObservableCollection<Salas> Salas
         {
-            get { return salas; }
-            set
+            get => salas; set
             {
                 salas = value;
-                salaComboBox.ItemsSource = salas;
+                NotifyPropertyChanged("Salas");
             }
         }
-
+        public string Titulo { get; set; }
         public AddUpdateSesion(string tituloVenta)
         {
             InitializeComponent();
-            Title = tituloVenta;
+            Titulo = tituloVenta;
             Hora = "";
 
             DataContext = this;
-
-            peliculaComboBox.ItemsSource = peliculas;
-            peliculaComboBox.DisplayMemberPath = "Titulo";
-
-            salaComboBox.ItemsSource = salas;
-            salaComboBox.DisplayMemberPath = "Numero";
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Regex patronHora= new Regex(@"^(([1]{1}[2-9]{1})|([2]{1}[0-3]{1})|(00)):[0-5]{1}[0-9]{1}$");
+            Regex patronHora = new Regex(@"^(([1]{1}[2-9]{1})|([2]{1}[0-3]{1})|(00)):[0-5]{1}[0-9]{1}$");
             if (!patronHora.IsMatch(Hora))
             {
                 string mensaje = "Hora introducida incorrecta.\nEl formato de la hora debe ser (HH:MM) y las horas posibles son 12:00-00:00";
@@ -83,6 +94,11 @@ namespace proyectoCine
             //si el estado de los campos no es correcto
             if (patronHora.IsMatch(Hora) && Pelicula != null && Sala != null)
                 DialogResult = true;
+        }
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
