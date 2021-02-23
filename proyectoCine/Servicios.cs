@@ -22,6 +22,13 @@ namespace proyectoCine
         public static ObservableCollection<Pelicula> Peliculas { get { return ObtenPeliculas(); } set => peliculas = value; }
         public static ObservableCollection<Sesion> Sesiones { get => ObtenSesiones(); set => sesiones = value; }
         public static ObservableCollection<Salas> Salas { get { return ObtenSalas(); } set => salas = value; }
+        private static ObservableCollection<Ventas> ventas;
+
+        public static ObservableCollection<Ventas> Ventas
+        {
+            get { return ObtenerVentas(); }
+            set { ventas = value; }
+        }
 
         static ObservableCollection<Pelicula> ObtenPeliculas()
         {
@@ -52,6 +59,27 @@ namespace proyectoCine
             return peliculasBD;
         }
 
+        private static ObservableCollection<Salas> ObtenSalas()
+        {
+            if (!_DAOCine.ExistenSalas())// si todavia no se han creado las salas se crean
+                InsertaSalas();
+
+            return _DAOCine.ObtenSalas();
+        }
+
+        private static ObservableCollection<Sesion> ObtenSesiones()
+        {
+            if (!_DAOCine.ExistenSesiones())// si todavia no se han creado las salas se crean
+                InsertaSesiones();
+
+            return _DAOCine.ObtenSesiones();
+        }
+
+        public static ObservableCollection<Ventas> ObtenerVentas()
+        {
+            return _DAOCine.ObtenVentas();
+        }
+        
         public static void RenuevaPeliculas()
         {
             try
@@ -99,35 +127,25 @@ namespace proyectoCine
             _DAOCine.InsertaSala(sala);
         }
 
-        private static ObservableCollection<Salas> ObtenSalas()
-        {
-            if (!_DAOCine.ExistenSalas())// si todavia no se han creado las salas se crean
-                InsertaSalas();
-
-            return _DAOCine.ObtenSalas();
-        }
-
-        private static ObservableCollection<Sesion> ObtenSesiones()
-        {
-            if (!_DAOCine.ExistenSesiones())// si todavia no se han creado las salas se crean
-                InsertaSesiones();
-
-            return _DAOCine.ObtenSesiones();
-        }
-
-        public static void ActualizaSala(Salas sala)
-        {
-            _DAOCine.ActualizaSala(sala);
-        }
-    
         public static void InsertaSesion(Sesion sesion)
         {
             _DAOCine.InsertaSesion(sesion);
+        }
+    
+        public static void ActualizaSala(Salas sala)
+        {
+            _DAOCine.ActualizaSala(sala);
         }
 
         public static void ActualizaSesion(Sesion sesion)
         {
             _DAOCine.ActualizaSesion(sesion);
         }
+        
+        public static void EliminarSesion(Sesion sesion)
+        {
+            _DAOCine.EliminaSesion(sesion);
+        }
+
     }
 }

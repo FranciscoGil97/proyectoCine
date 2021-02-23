@@ -67,10 +67,20 @@ namespace proyectoCine
                 SqliteCommand comando;
                 Conexion.Open();
                 comando = Conexion.CreateCommand();
+
                 comando.CommandText = "DELETE FROM sesiones";
                 comando.ExecuteNonQuery();
+
                 comando.CommandText = "DELETE FROM peliculas";
                 comando.ExecuteNonQuery();
+
+                comando.CommandText = "DELETE FROM ventas";
+                comando.ExecuteNonQuery();
+
+                //resetear el AUTOINCREMENT de la tabla ventas
+                comando.CommandText = "DELETE FROM sqlite_sequence WHERE name='ventas'"; 
+                comando.ExecuteNonQuery();
+
                 comando.Parameters.Add("@id", SqliteType.Integer);
                 comando.Parameters.Add("@titulo", SqliteType.Text);
                 comando.Parameters.Add("@cartel", SqliteType.Text);
@@ -516,6 +526,106 @@ namespace proyectoCine
             return sesiones;
         }
 
+        public Sesion ObtenSesion(int idSesion)
+        {
+            Sesion sesion=null;
+            SqliteDataReader datos = null;
+            try
+            {
+                SqliteCommand comando;
+                
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT idSesion, " +
+                                                "peliculas.idPelicula AS 'idPelicula', " +
+                                                "peliculas.titulo AS 'titulo', " +
+                                                "salas.idSala AS 'idSala'," +
+                                                "salas.numero AS 'nombreSala'," +
+                                                "hora " +
+                                        "FROM peliculas JOIN sesiones JOIN salas " +
+                                            "ON  sesiones.pelicula = peliculas.idPelicula " +
+                                                "AND sesiones.sala = salas.idSala " +
+                                                "WHERE sesiones.IdSesion="+idSesion;
+                datos = comando.ExecuteReader();
+
+                if (datos.HasRows)
+                {
+                    int idPelicula, idSala;
+                    string hora, tituloPelicula, nombreSala;
+
+                    if (datos.Read())
+                    {
+                        idSesion = datos.GetInt32(datos.GetOrdinal("idSesion"));
+                        idPelicula = datos.GetInt32(datos.GetOrdinal("idPelicula"));
+                        idSala = datos.GetInt32(datos.GetOrdinal("idSala"));
+                        hora = (string)datos["hora"];
+                        tituloPelicula = (string)datos["titulo"];
+                        nombreSala = (string)datos["nombreSala"];
+
+                        sesion=new Sesion(idSesion, idPelicula, idSala, hora, nombreSala, tituloPelicula);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Leer sesion en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return sesion;
+        }
+
+        public ObservableCollection<Ventas> ObtenVentas()
+        {
+            ObservableCollection<Ventas> ventas = new ObservableCollection<Ventas>();
+            SqliteDataReader datos = null;
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
+
+                comando.CommandText = "SELECT * FROM ventas";
+                datos = comando.ExecuteReader();
+
+                if (datos.HasRows)
+                {
+                    int idVenta, idSesion, cantidad;
+                    string formaPago;
+
+                    while (datos.Read())
+                    {
+                        idVenta = datos.GetInt32(datos.GetOrdinal("idVenta"));
+                        idSesion = datos.GetInt32(datos.GetOrdinal("sesion"));
+                        cantidad = datos.GetInt32(datos.GetOrdinal("cantidad"));
+                        formaPago = (string)datos["pago"];
+
+                        Sesion sesion = ObtenSesion(idSesion);
+                        ventas.Add(new Ventas(idVenta,sesion,cantidad,formaPago));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Leer Ventas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                    if (datos != null && datos.IsClosed)
+                        datos.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            return ventas;
+        }
+
         public void ActualizaSala(Salas sala)
         {
             try
@@ -582,7 +692,7 @@ namespace proyectoCine
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Actualizar salas en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Actualizar sesion en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -680,7 +790,35 @@ namespace proyectoCine
             return esPosibleInsertar;
         }
 
+        public void EliminaSesion(Sesion sesion)
+        {
+            try
+            {
+                SqliteCommand comando;
+                Conexion.Open();
+                comando = Conexion.CreateCommand();
 
+                comando.CommandText = "DELETE FROM sesiones WHERE idSesion=" + sesion.Id;
+                comando.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Eliminar sesion en la BD: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    if (Conexion.State == ConnectionState.Open)//si la conexión está abierta la cierro
+                        Conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cerrar: " + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
     }
 }

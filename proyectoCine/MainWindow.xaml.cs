@@ -17,21 +17,21 @@ namespace proyectoCine
 {
     public partial class MainWindow : Window
     {
-        MainWindowVM mainWindowVM;
+        MainWindowVM MainWindowVM;
 
         public MainWindow()
         {
-            mainWindowVM = new MainWindowVM();
+            MainWindowVM = new MainWindowVM();
             InitializeComponent();
 
-            DataContext = mainWindowVM;
+            DataContext = MainWindowVM;
         }
 
         public void ActualizaVista()
         {
-            mainWindowVM.ActualizaVista();
+            MainWindowVM.ActualizaVista();
             DataContext = null;
-            DataContext = mainWindowVM;
+            DataContext = MainWindowVM;
         }
 
         private void AddSala_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -62,20 +62,20 @@ namespace proyectoCine
         {
             AddUpdateSala actualizarSala = new AddUpdateSala("Actualizar Sala")
             {
-                Numero = mainWindowVM.SalaSeleccionada.Numero,
-                Capacidad = mainWindowVM.SalaSeleccionada.Capacidad,
-                Disponible = mainWindowVM.SalaSeleccionada.Disponible
+                Numero = MainWindowVM.SalaSeleccionada.Numero,
+                Capacidad = MainWindowVM.SalaSeleccionada.Capacidad,
+                Disponible = MainWindowVM.SalaSeleccionada.Disponible
             };
             actualizarSala.ResizeMode = ResizeMode.NoResize;
             actualizarSala.ShowInTaskbar = false;
 
             if ((bool)actualizarSala.ShowDialog())
             {
-                mainWindowVM.SalaSeleccionada.Capacidad = actualizarSala.Capacidad;
-                mainWindowVM.SalaSeleccionada.Numero = actualizarSala.Numero;
-                mainWindowVM.SalaSeleccionada.Disponible = actualizarSala.Disponible;
+                MainWindowVM.SalaSeleccionada.Capacidad = actualizarSala.Capacidad;
+                MainWindowVM.SalaSeleccionada.Numero = actualizarSala.Numero;
+                MainWindowVM.SalaSeleccionada.Disponible = actualizarSala.Disponible;
 
-                Servicios.ActualizaSala(mainWindowVM.SalaSeleccionada);
+                Servicios.ActualizaSala(MainWindowVM.SalaSeleccionada);
             }
             ActualizaVista();
         }
@@ -84,15 +84,15 @@ namespace proyectoCine
         {
             AddUpdateSesion addSesion = new AddUpdateSesion("Añadir sesión")
             {
-                Peliculas = mainWindowVM.Peliculas,
-                Salas = mainWindowVM.Salas
+                Peliculas = MainWindowVM.Peliculas,
+                Salas = MainWindowVM.Salas
             };
 
-            addSesion.Peliculas = mainWindowVM.Peliculas;
-            addSesion.Salas = mainWindowVM.Salas;
+            addSesion.Peliculas = MainWindowVM.Peliculas;
+            addSesion.Salas = MainWindowVM.Salas;
             if ((bool)addSesion.ShowDialog())
             {
-                int nuevoIdSesion = mainWindowVM.Sesiones[mainWindowVM.Sesiones.Count - 1].Id + 1;
+                int nuevoIdSesion = MainWindowVM.Sesiones[MainWindowVM.Sesiones.Count - 1].Id + 1;
                 Sesion sesionNueva = new Sesion(nuevoIdSesion, addSesion.Pelicula.Id, addSesion.Sala.Id, addSesion.Hora);
                 Servicios.InsertaSesion(sesionNueva);
             }
@@ -108,20 +108,20 @@ namespace proyectoCine
         {
             AddUpdateSesion updateSesion = new AddUpdateSesion("Actualizar sesión")
             {
-                Peliculas = mainWindowVM.Peliculas,
-                Salas = mainWindowVM.Salas,
-                Sala = mainWindowVM.Salas[mainWindowVM.SesionSeleccionada.IdSala - 1],
-                Pelicula = mainWindowVM.Peliculas[mainWindowVM.SesionSeleccionada.IdPelicula - 1],
-                Hora = mainWindowVM.SesionSeleccionada.Hora
+                Peliculas = MainWindowVM.Peliculas,
+                Salas = MainWindowVM.Salas,
+                Sala = MainWindowVM.Salas[MainWindowVM.SesionSeleccionada.IdSala - 1],
+                Pelicula = MainWindowVM.Peliculas[MainWindowVM.SesionSeleccionada.IdPelicula - 1],
+                Hora = MainWindowVM.SesionSeleccionada.Hora
 
             };
 
             if ((bool)updateSesion.ShowDialog())
             {
-                mainWindowVM.SesionSeleccionada.IdPelicula = updateSesion.Pelicula.Id;
-                mainWindowVM.SesionSeleccionada.IdSala = updateSesion.Sala.Id;
-                mainWindowVM.SesionSeleccionada.Hora = updateSesion.Hora;
-                Servicios.ActualizaSesion(mainWindowVM.SesionSeleccionada);
+                MainWindowVM.SesionSeleccionada.IdPelicula = updateSesion.Pelicula.Id;
+                MainWindowVM.SesionSeleccionada.IdSala = updateSesion.Sala.Id;
+                MainWindowVM.SesionSeleccionada.Hora = updateSesion.Hora;
+                Servicios.ActualizaSesion(MainWindowVM.SesionSeleccionada);
             }
             ActualizaVista();
         }
@@ -133,7 +133,8 @@ namespace proyectoCine
 
         private void EliminarSesion_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            Servicios.EliminarSesion(MainWindowVM.SesionSeleccionada);
+            ActualizaVista();
         }
 
         private void EliminarSesion_CanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -92,12 +92,12 @@
         <Menu
             DockPanel.Dock="Top">
             <MenuItem
-                Header="Ayuda" />
+                Header="_Ayuda" />
         </Menu>
         <TabControl
             DockPanel.Dock="Top">
             <TabItem
-                Header="Cartelera">
+                Header="_Cartelera">
 
                 <ListBox
                     DockPanel.Dock="Top"
@@ -114,7 +114,7 @@
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"
-                Header="Salas">
+                Header="_Salas">
                 <DockPanel
                     LastChildFill="True">
                     <DockPanel
@@ -164,7 +164,7 @@
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"
-                Header="Sesiones">
+                Header="S_esiones">
                 <DockPanel LastChildFill="True">
                     <DockPanel
                         DockPanel.Dock="Bottom"
@@ -215,12 +215,63 @@
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"
-                Header="Ventas">
-
+                Header="_Ventas">
+                <DockPanel
+                    LastChildFill="True">
+                    <DockPanel
+                        LastChildFill="False"
+                        DockPanel.Dock="Bottom">
+                        <Button
+                            DockPanel.Dock="Right"
+                            Content="Vender entradas" 
+                            Margin="5,0"/>
+                    </DockPanel>
+                    <DataGrid
+                        DockPanel.Dock="Top"
+                        x:Name="ventasDataGrid"
+                        ItemsSource="{Binding Path=Ventas}"
+                        ColumnWidth="*"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Header="Id venta"
+                                Binding="{Binding Path=Id}"
+                                IsReadOnly="True" 
+                                Width="0.5*"/>
+                            <DataGridTextColumn
+                                Header="Id sesion"
+                                Binding="{Binding Path=Sesion.Id}"
+                                IsReadOnly="True"
+                                Width="0.5*" />
+                            <DataGridTextColumn
+                                Header="Título pelicula"
+                                Binding="{Binding Path=Sesion.TituloPelicula}"
+                                IsReadOnly="True" 
+                                Width="1.5*"/>
+                            <DataGridTextColumn
+                                Header="Sala"
+                                Binding="{Binding Path=Sesion.NombreSala}"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Header="Hora"
+                                Binding="{Binding Path=Sesion.Hora}"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Header="Cantidad vendidas"
+                                Binding="{Binding Path=Cantidad}"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Header="Pago"
+                                Binding="{Binding Path=Pago}"
+                                IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
             <TabItem
                 Style="{StaticResource tabs}"
-                Header="Ocupación salas">
+                Header="_Ocupación salas">
 
             </TabItem>
         </TabControl>

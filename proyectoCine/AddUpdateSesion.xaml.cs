@@ -21,14 +21,11 @@ namespace proyectoCine
     /// </summary>
     public partial class AddUpdateSesion : Window
     {
-
-        public string Hora { get; set; }
-
         private ObservableCollection<Pelicula> peliculas;
         private ObservableCollection<Salas> salas;
 
+        public string Hora { get; set; }
         public Pelicula Pelicula { get; set; }
-
         public Salas Sala { get; set; }
 
         public ObservableCollection<Pelicula> Peliculas
@@ -53,9 +50,9 @@ namespace proyectoCine
 
         public AddUpdateSesion(string tituloVenta)
         {
-            Hora = "";
             InitializeComponent();
             Title = tituloVenta;
+            Hora = "";
 
             DataContext = this;
 
@@ -68,18 +65,15 @@ namespace proyectoCine
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string patronHora = @"^(([1]{1}[2-9]{1})|([2]{1}[0-3]{1})|(00)):[0-5]{1}[0-9]{1}$";
-            if (!Regex.IsMatch(Hora, patronHora))
+            Regex patronHora= new Regex(@"^(([1]{1}[2-9]{1})|([2]{1}[0-3]{1})|(00)):[0-5]{1}[0-9]{1}$");
+            if (!patronHora.IsMatch(Hora))
             {
                 string mensaje = "Hora introducida incorrecta.\nEl formato de la hora debe ser (HH:MM) y las horas posibles son 12:00-00:00";
                 MessageBox.Show(mensaje, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-                
             }
 
             if (Pelicula == null)
                 MessageBox.Show("Para insertar una sesión debes seleccionar una película", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-            
 
             if (Sala == null)
                 MessageBox.Show("Para insertar una sesión debes seleccionar una sala", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -87,7 +81,7 @@ namespace proyectoCine
 
             //No cierro la ventana cuando se le da al botón de aceptar 
             //si el estado de los campos no es correcto
-            if (Regex.IsMatch(Hora, patronHora) && Pelicula != null && Sala != null)
+            if (patronHora.IsMatch(Hora) && Pelicula != null && Sala != null)
                 DialogResult = true;
         }
     }
